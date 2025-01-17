@@ -1,0 +1,30 @@
+RNA_transcrito = "UUUAUAGUAGAAGAGGUCCAAGCGGGAACAGAACUGCUAACCCAGCCCCAUCCUGUCCUUACACAAAGAUGCUGCGGUCUUGAUCCACCUCGCUCGGCCACUCGUUCACCCCGUCUAAGUUUGCGCGGAACUAACCAAAAGAUGACAACAAGGCGGGACGAACCCUUUACGCUGUCACUCCAUAAAACAUAGUUUUAAUACCGGGUCUCUCAAAAAAGUAUGCUGGGUGCAUCGUUCCUUGGUUUAGUAGCUCCUCCGUUUCGGGCUCGGAUGAGCCUCGGAAUCCUAAGGGUAAAUGCGAAAGAUCCCACGGAUAAGGUCACUUUAACCUGUUACCCAACCAAGCCGGGCACGCGCGGUCUCCCGGAUGACAUCUCGGGAGCCUCACGAAUCAAGGCCGCAAUGCAAGAGAGGCUUUACGCCACGGUAGAGGUUACACGUUUCCCGGGGCAGGAUCCCGUCAGAGGUUUCCUUAACGAACUCACUCCAGGAUACAGUUCCAUGCACUAGGGGUCUCGGAGUCAGGCGCAACCGGCGCAAAGUAAACGAGUGGUCGAAAGCGGCGAUUGUUGUCGAUGGAGGGUUCUUUAACAUACUUACGGCCUUAGCAGUUCAUACACCCUCUACUCAAGAGGUUGCAGCGAACUUAGUUCCCAGUAAUGCACACUAGUUGACCUCAUCCCUAGAGUGACAACUCACUAUAGAAGUCGUCGUUUUGCUAAUCGAUCCCGUCGAUCCGAUGCAAACUUACCCAUUCACGCUCGCACAUCGGUUUCACAACGGAUCGUCAUACUCCAGUGAGACGCGGAUGGGCGUCAAGUGGUUG"
+codon_table = {
+    'UUU': 'Fenilalanina', 'UUC': 'Fenilalanina', 'UUA': 'Leucina', 'UUG': 'Leucina',
+    'CUU': 'Leucina', 'CUC': 'Leucina', 'CUA': 'Leucina', 'CUG': 'Leucina',
+    'AUU': 'Isoleucina', 'AUC': 'Isoleucina', 'AUA': 'Isoleucina', 'AUG': 'Metionina(códon de início)',
+    'GUU': 'Valina', 'GUC': 'Valina', 'GUA': 'Valina', 'GUG': 'Valina',
+    'UCU': 'Serina', 'UCC': 'Serina', 'UCA': 'Serina', 'UCG': 'Serina',
+    'CCU': 'Prolina', 'CCC': 'Prolina', 'CCA': 'Prolina', 'CCG': 'Prolina',
+    'ACU': 'Treonina', 'ACC': 'Treonina', 'ACA': 'Treonina', 'ACG': 'Treonina',
+    'GCU': 'Alanina', 'GCC': 'Alanina', 'GCA': 'Alanina', 'GCG': 'Alanina',
+    'UAU': 'Tirosina', 'UAC': 'Tirosina', 'UAA': 'Stop', 'UAG': 'Stop',
+    'CAU': 'Histidinna', 'CAC': 'Histidina', 'CAA': 'Glutamina', 'CAG': 'Glutamina',
+    'AAU': 'Aspargina', 'AAC': 'Aspargina', 'AAA': 'Lisina', 'AAG': 'Lisina',
+    'GAU': 'Ácido Aspártico', 'GAC': 'Ácido Aspártico', 'GAA': 'Ácido Glutâmico', 'GAG': 'Ácido Glutâmico',
+    'UGU': 'Cisteína', 'UGC': 'Cisteína', 'UGA': 'Stop', 'UGG': 'Triptofano',
+    'CGU': 'Arginina', 'CGC': 'Arginina', 'CGA': 'Arginina', 'CGG': 'Arginina',
+    'AGU': 'Serina', 'AGC': 'Serina', 'AGA': 'Arginina', 'AGG': 'Arginina',
+    'GGU': 'Glicina', 'GGC': 'Glicina', 'GGA': 'Glicina', 'GGG': 'Glicina'
+}
+
+protein_sequence = ""
+for i in range(0, len(RNA_transcrito) - 2, 3):
+    codon = RNA_transcrito[i:i+3]
+    if codon in codon_table:
+        amino_acid = codon_table[codon]
+        if amino_acid == 'stop':  # Parar a tradução no códon de parada
+            break
+        protein_sequence += amino_acid + f'-{codon}\n'
+print(f'3) A sequência de aminoácidos traduzida é:')
+print(f'   {protein_sequence}')
