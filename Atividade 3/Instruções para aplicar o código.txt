@@ -1,0 +1,38 @@
+Como Rodar o código da Atividade 3
+1. Instalar as Dependências
+Antes de rodar a aplicação, é necessário instalar as bibliotecas Streamlit, Pandas e Plotly. Para isso, siga estes passos:
+
+1.1.  Abra o terminal ou Prompt de Comando.
+Execute os comandos abaixo para instalar cada biblioteca:
+bash
+Copiar
+Editar
+pip install streamlit
+pip install pandas
+pip install plotly
+Certifique-se de que os comandos foram executados sem erros.
+
+1.2. Navegar até a Pasta 'Atividade 3'
+Acesse o diretório onde está localizada a aplicação. Use o comando cd para navegar até a pasta. Por exemplo:
+
+bash
+Copiar
+Editar
+cd "C:/caminho/para/Atividade 3"
+Substitua C:/caminho/para pelo caminho correto no seu computador. Use aspas se houver espaços no nome da pasta.
+
+1.3. Rodar a Aplicação
+Dentro da pasta, execute o seguinte comando para iniciar a aplicação Streamlit:
+
+bash
+Copiar
+Editar
+streamlit run nome_do_arquivo.py
+Substitua nome_do_arquivo.py pelo nome do arquivo Python da sua aplicação. Por exemplo, se o arquivo se chamar app.py, o comando será:
+
+bash
+Copiar
+Editar
+streamlit run app.py
+1.4. Abrir a Aplicação no Navegador
+Após rodar o comando acima, o Streamlit abrirá a aplicação automaticamente no navegador. Caso não abra, copie o Local URL mostrado no terminal (algo como http://localhost:8501) e cole no navegador.
