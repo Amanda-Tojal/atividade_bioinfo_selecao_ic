@@ -1,0 +1,100 @@
+Relatório do desafio final
+1. Descrição de cada etapa da pipeline e as decisões tomadas
+1.1. Descrição de cada etapa da pipeline 
+O objetivo foi desenvolver uma pipeline simplificada que simula as etapas principais de montagem de genomas virais, desde o processamento de sequências de entrada até a análise da montagem final, com foco em qualidade e precisão. A pipeline utiliza dados de sequências virais em formato FASTQ e emprega ferramentas de bioinformática para realizar cada passo do processo.
+A coleta dos dados sobre o Genomas Virais em arquivo FASTQ foi obtido de um repositório público da NCBI (National Center for Biotechnology Information). Disponível em: <https://ftp.ncbi.nlm.nih.gov/sra/data/SRP125168/m160801_104636_42242_c101006162550000001823230309161600_s1_p0.fastq>
+foi o arquivo menos pesado que conseguir baixar no meu humilde notebook.
+O arquivo FASTQ contém leituras de DNA/RNA virais, onde cada leitura é associada a uma sequência de nucleotídeos e uma pontuação de qualidade.
+Foi tirado informações sobre esses dados e forma de montagem do algoritmo do genoma de um Artigo Cientifico da UFPA do "Oliveira, Renato Renison Moreira. GAVGA: Um Algoritmo Genético para Montagem de Genomas Virais / Renato Renison Moreira Oliveira. — 2017  71 f. : il.; 30 cm." disponível em: <https://www.ppgcc.propesp.ufpa.br/Disserta%C3%A7%C3%B5es_2017/Renato%20Renison%20Moreira%20Oliveira_Disserta%C3%A7%C3%A3o.pdf>
+foi utilizado na bioinformática:
+Qualidade das Leituras (FastQC): A função run_fastqc executa a ferramenta FastQC para avaliar a qualidade das leituras. Os resultados são armazenados no diretório output_dir.
+Remoção de Adaptadores: A função remove_adapters usa fastp para remover adaptadores de sequências, se necessário.
+Remoção de Contaminação: A função remove_contamination utiliza BBMap para remover sequências contaminantes de um arquivo FASTQ com base em um banco de dados de contaminantes.
+Montagem do Genoma: A função assemble_genome chama o SPAdes para realizar a montagem do genoma a partir das leituras limpas.
+Análise da Montagem: A função analyze_assembly usa QUAST para fornecer uma análise detalhada da montagem, incluindo o número de contigs, N50, cobertura, etc.
+Cálculo do N50: A função calculate_n50 calcula o valor N50, que é uma métrica importante da qualidade da montagem (indica o comprimento do contig no qual 50% do genoma montado está representado).
+
+1.2. Decisões tomadas
+Foi utilizada o python por ser uma linguagem mais simples para a candidata. 
+2. resultados preliminares e limitações observadas.
+2.1. Resultados preliminares
+Apresentar os resultados iniciais da pipeline, incluindo a qualidade do genoma montado, e discutir possíveis limitações.
+    Métricas de Avaliação:
+        Número de contigs: Quantidade de fragmentos de sequência gerados.
+        N50: Mediana do tamanho dos contigs, útil para avaliar a continuidade da montagem.
+        Cobertura: Profundidade média de leitura nas posições do genoma.
+2.2. Limitações observadas
+ A montagem pode ser imprecisa se as leituras forem muito curtas ou se houver muita perda de qualidade.
+        Contaminações podem ainda não ser 100% eliminadas, o que pode afetar a qualidade do genoma final.
+3. Ideias de melhorias para um futuro desenvolvimento
+Sobre o que pode ser melhorado para futuras versões da pipeline.
+As sugestões de melhoria:
+   - Aprimorar a remoção de contaminação com o uso de bancos de dados de sequências contaminantes mais abrangentes.
+   - Aumentar a profundidade do sequenciamento para obter uma cobertura mais completa do genoma viral.
+   - Explorar ferramentas mais avançadas para montagem, como algoritmos de montagem de terceira geração (Nanopore, PacBio) para melhorar a precisão e a integridade da montagem.
+4. Um script funcional ou um pseudocódigo que represente a pipeline 
+4.1. pseudocódigo
+INÍCIO
+
+    ABRIR o arquivo "m160801_104636_42242_c101006162550000001823230309161600_s1_p0.fastq" para leitura
+    LER o conteúdo do arquivo
+    EXIBIR os primeiros 1000 caracteres do conteúdo
+
+    FUNÇÃO run_fastqc(input_file, output_dir):
+        EXECUTAR o comando "fastqc {input_file} -o {output_dir}"
+
+    FUNÇÃO remove_adapters(input_file, output_file):
+        EXECUTAR o comando "fastp -i {input_file} -o {output_file} --detect_adapter_for_pe"
+
+    FUNÇÃO remove_contamination(input_file, output_file):
+        EXECUTAR o comando "bbduk.sh in={input_file} out={output_file} ref=contaminant_db.fasta k=31"
+
+    FUNÇÃO assemble_genome(input_file, output_dir):
+        EXECUTAR o comando "spades.py -s {input_file} -o {output_dir}"
+
+    FUNÇÃO analyze_assembly(assembly_dir):
+        EXECUTAR o comando "quast.py {assembly_dir}/contigs.fasta"
+
+    FUNÇÃO calculate_n50(contig_file):
+        SE o arquivo contig_file NÃO EXISTIR:
+            EXIBIR "Erro: o arquivo {contig_file} não foi encontrado."
+            RETORNAR NULO
+        
+        CRIAR lista de contigs
+        PARA cada registro em contig_file:
+            ADICIONAR o comprimento do contig à lista
+        
+        ORDENAR a lista de contigs em ordem decrescente
+        
+        CALCULAR comprimento total dos contigs
+        CALCULAR metade do comprimento total
+        
+        INICIALIZAR soma de comprimento como 0
+        INICIALIZAR N50 como NULO
+        
+        PARA cada comprimento na lista de contigs:
+            SOMAR o comprimento à soma
+            SE a soma for maior ou igual à metade do comprimento total:
+                ATRIBUIR N50 ao comprimento atual
+                SAIR do loop
+        
+        RETORNAR N50
+
+    FUNÇÃO principal main():
+        DEFINIR caminhos para os arquivos:
+            input_file = "m160801_104636_42242_c101006162550000001823230309161600_s1_p0.fastq"
+            output_dir = "resultado_fastqc"
+            cleaned_file = "sequencias_limpas.fastq"
+            assembled_dir = "genoma_montado"
+            contig_file = "genoma_montado/spades_output/contigs.fasta"
+
+        EXECUTAR o controle de qualidade com FastQC
+        EXECUTAR a remoção de adaptadores
+        EXECUTAR a remoção de contaminação
+        EXECUTAR a montagem do genoma
+        EXECUTAR a análise da montagem
+        CALCULAR o N50
+
+    EXECUTAR a função principal
+
+FIM
